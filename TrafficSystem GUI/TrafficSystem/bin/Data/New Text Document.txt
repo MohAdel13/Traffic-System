@@ -1,0 +1,55 @@
+CREATE TABLE [dbo].[Address] (
+    [Id]          INT           NOT NULL,
+    [Governorate] VARCHAR (MAX) NULL,
+    [City]        VARCHAR (MAX) NULL,
+    [Street]      VARCHAR (MAX) NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[Lisence] (
+    [LisNum] VARCHAR (50) NOT NULL,
+    [D]      DATE         NULL,
+    [AID]    INT          NOT NULL,
+    PRIMARY KEY CLUSTERED ([LisNum] ASC),
+    FOREIGN KEY ([AID]) REFERENCES [dbo].[Address] ([Id])
+);
+
+CREATE TABLE [dbo].[Driver] (
+    [LisNum]    VARCHAR (50)  NOT NULL,
+    [DName]     VARCHAR (MAX) NULL,
+    [Tel]       VARCHAR (50)  NULL,
+    [Age]       INT           NULL,
+    [AId]       INT           NULL,
+    [Gender]    CHAR (10)     NULL,
+    [Mar_state] CHAR (10)     NULL,
+    [Pass]      VARCHAR (MAX) NULL,
+    PRIMARY KEY CLUSTERED ([LisNum] ASC),
+    FOREIGN KEY ([LisNum]) REFERENCES [dbo].[Lisence] ([LisNum]),
+    FOREIGN KEY ([AId]) REFERENCES [dbo].[Address] ([Id])
+);
+
+CREATE TABLE [dbo].[Car] (
+    [PlatNum] VARCHAR (50)  NOT NULL,
+    [Type]    VARCHAR (MAX) NULL,
+    [Color]   VARCHAR (MAX) NULL,
+    [Model]   VARCHAR (MAX) NULL,
+    [Owener]  VARCHAR (50)  NULL,
+    [BuyDate] DATE          NULL,
+    PRIMARY KEY CLUSTERED ([PlatNum] ASC),
+    FOREIGN KEY ([PlatNum]) REFERENCES [dbo].[Lisence] ([LisNum]),
+    FOREIGN KEY ([Owener]) REFERENCES [dbo].[Driver] ([LisNum])
+);
+
+CREATE TABLE [dbo].[Fine] (
+    [Id]         INT          NOT NULL,
+    [DriverLis]  VARCHAR (50) NULL,
+    [CarPlatNum] VARCHAR (50) NULL,
+    [D]          DATE         NULL,
+    [AId]        INT          NULL,
+    [Cost]       INT          NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    FOREIGN KEY ([DriverLis]) REFERENCES [dbo].[Driver] ([LisNum]),
+    FOREIGN KEY ([CarPlatNum]) REFERENCES [dbo].[Car] ([PlatNum]),
+    FOREIGN KEY ([AId]) REFERENCES [dbo].[Address] ([Id])
+);
+
